@@ -1,0 +1,10 @@
+{% extends "base_books.html" %}
+
+{% block content %}
+  <h2>Books Management System</h2>
+  <ul>
+    <li><a href="{% url 'books:book_list' %}">Book</a></li>
+    <li><a href="{% url 'books:author_list' %}">Author</a></li>
+    <li><a href="{% url 'books:publisher_list' %}">Publisher</a></li>
+  </ul>
+{% endblock %}

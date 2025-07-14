@@ -1,51 +1,44 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views import generic
+
 from polls.models import Choice, Question
-from django.http import HttpResponse
-from django.shortcuts import render
-from .forms import NameForm  # 추가
-from .forms import ContactForm
 
-def get_name(request):
-    if request.method == "POST":
-        form = NameForm(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect('/thanks/')
-    else:
-        form = NameForm()
-
-    return render(request, 'polls/form.html', {'form': form})
+# ✅ logging 추가
+import logging
+logger = logging.getLogger(__name__)
 
 
-def show_form(request):
-    form = NameForm()  # form 객체 생성
-    return render(request, 'polls/form.html', {'form': form})  # 템플릿에 전달
+# --- Class-based GenericView ---
+class IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
 
-# views.py
-def show_form(request):
-    return render(request, 'polls/form.html')
+    def get_queryset(self):
+        """최근 생성된 질문 5개 반환"""
+        return Question.objects.order_by('-pub_date')[:5]
 
 
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
 
 
-def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    return render(request, 'polls/index.html', {'latest_question_list': latest_question_list})
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
 
-def detail(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
 
-def results(request, question_id):  # ✅ 이거 하나만 유지
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
-
+# --- Function-based View ---
 def vote(request, question_id):
+    # ✅ 로그 기록
+    logger.debug(f'vote() 호출 - question_id: {question_id}')
+
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):  # 여기도 Choice로 수정
+    except (KeyError, Choice.DoesNotExist):
         return render(request, 'polls/detail.html', {
             'question': question,
             'error_message': "You didn't select a choice.",

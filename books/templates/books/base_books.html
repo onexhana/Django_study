@@ -1,0 +1,27 @@
+<!-- books/templates/books/base_books.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}Books Application Site{% endblock %}</title>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div>
+    {% block sidebar %}
+      <ul>
+        <li><a href="/">Project_Home</a></li>
+        <li><a href="/admin/">Admin</a></li>
+        <li><a href="/books/">Books_Home</a></li>
+      </ul>
+    {% endblock %}
+  </div>
+
+  <!-- Main Content -->
+  <div>
+    {% block content %}
+    {% endblock %}
+  </div>
+
+</body>
+</html>

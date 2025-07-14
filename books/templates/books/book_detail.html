@@ -1,0 +1,11 @@
+<!-- books/templates/books/book_detail.html -->
+{% extends "books/base_books.html" %}
+
+{% block content %}
+  <h2>{{ book.title }}</h2>
+  <ul>
+    <li><strong>Authors:</strong> {{ book.authors }}</li>
+    <li><strong>Publisher:</strong> {{ book.publisher }}</li>
+    <li><strong>Publication date:</strong> {{ book.pub_date }}</li>
+  </ul>
+{% endblock %}

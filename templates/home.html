@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Project_Home</title>
+</head>
+<body>
+    <ul>
+        <li>Project_Home</li>
+        <li><a href="/admin/">Admin</a></li>
+    </ul>
+
+    <h2><strong>shkim Django Applications</strong></h2>
+    <ul>
+        {% for key, value in verbose_dict.items %}
+            <li><a href="{% url key|add:':index' %}">{{ value }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
